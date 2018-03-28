@@ -1,13 +1,39 @@
 package utilities
 
-class HTTPRequest {
+import java.io.PrintStream
+import java.net.{InetAddress, Socket}
 
-  val version = "HTTP/1.1"
-  var header = Map("client" -> "reinventing-http-client")
-  var method = "GET"
-  var path = ""
-  var host = ""
-  var port = 80
-  var body = ""
+import scala.io.BufferedSource
+
+class HTTPRequest(header : Map[String,String],
+                  body :String,
+                  method : String,
+                  path : String,
+                  version : String,
+                  host: String,
+                  port: Integer
+                 )
+{
+
+  def send(): Unit = {
+
+    val socket = new Socket(InetAddress.getByName(this.host), this.port)
+    lazy val input = new BufferedSource(socket.getInputStream()).getLines()
+    val output = new PrintStream(socket.getOutputStream())
+
+    output.println(s"${this.method} ${this.path} ${this.version}")
+    output.flush()
+
+    if (method == "POST" || method == "PUT"){
+      output.println(body)
+      output.flush()
+    }
+
+    while(input.hasNext){
+      println(input.next())
+    }
+
+    socket.close()
+  }
 
 }
