@@ -12,7 +12,7 @@ class HTTPRequest(header : Map[String,String],
                   version : String,
                   host: String,
                   port: Integer
-                 )
+)
 {
 
   def send(): Unit = {
