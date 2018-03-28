@@ -7,8 +7,7 @@ import utilities.{ HTTPRequest, HTTPResponse }
 
 object Client extends App {
 
-  def sendRequest(method : String): Unit = {
-    // Todo implement socket send here
+  def sendRequest(): Unit = {
     val request = new HTTPRequest()
     request.header += "Accept" -> "text/html"
     request.path = "/translation"
@@ -25,17 +24,16 @@ object Client extends App {
 
     val output = new PrintStream(socket.getOutputStream())
 
-    output.println(s"${request.method} ${request.path}")
-    output.println("GET /wiki/Spezial:Search?search=Katzen&go=Artikel HTTP/1.1")
-    output.println("Host: de.wikipedia.org")
-
+    output.println(s"${request.method} ${request.path} ${request.version}")
     output.flush()
 
-    println("Received: " + input.next())
+    while(input.hasNext) {
+      println("Response: " + input.next())
+    }
 
     socket.close()
   }
 
-  sendRequest("GET")
+  sendRequest()
 
 }
