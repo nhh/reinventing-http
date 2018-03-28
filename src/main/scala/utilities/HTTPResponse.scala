@@ -1,5 +1,8 @@
 package utilities
 
-class HTTPResponse(header : String, body: String) {
+class HTTPResponse {
+
+  var header = Map("server" -> "reinventing-http-server")
+  var body = ""
 
 }
